@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statistician's core · lively reference</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 20%, #ffe9b0, #fbc2eb, #a6c1ee, #b8e1fc);
+      background-size: 300% 300%;
+      animation: gradientShift 16s ease infinite;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      line-height: 1.5;
+      color: #1e2b3a;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* main glass container with a pop */
+    .app-container {
+      max-width: 1280px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 4rem 4rem 3rem 3rem;
+      padding: 2.5rem 2.8rem;
+      box-shadow: 0 40px 80px -20px rgba(40, 20, 80, 0.4),
+                  0 0 0 2px rgba(255, 255, 255, 0.6) inset,
+                  0 0 30px rgba(255, 220, 150, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      transition: all 0.2s;
+    }
+
+    /* vivid heading */
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: #0b1c2e;
+      margin-bottom: 0.15rem;
+      flex-wrap: wrap;
+      text-shadow: 0 4px 15px rgba(255, 200, 100, 0.5);
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #ff6b9d, #c445b2, #6a2c91);
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 0.3rem 1.3rem;
+      border-radius: 60px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 10px 20px -5px rgba(180, 70, 200, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.7);
+      transform: rotate(-1deg);
+    }
+
+    .subhead {
+      font-size: 1.18rem;
+      color: #1f2e4a;
+      margin-bottom: 2.4rem;
+      font-weight: 500;
+      padding: 0.6rem 1.4rem;
+      background: linear-gradient(90deg, rgba(255, 235, 170, 0.9), rgba(255, 215, 230, 0.7), transparent);
+      border-radius: 40px;
+      display: inline-block;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 12px rgba(250, 180, 100, 0.25);
+      border-left: 6px solid #ff8a5c;
+      letter-spacing: -0.01em;
+    }
+
+    /* card grid — playful + airy */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 2rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .card {
+      background: #ffffffd9;
+      backdrop-filter: blur(6px);
+      border-radius: 2.8rem 1rem 2.8rem 1rem;
+      padding: 1.9rem 1.7rem 1.7rem 1.7rem;
+      box-shadow: 0 20px 40px -12px rgba(20, 20, 60, 0.35),
+                  0 8px 0 0 #ffffff80 inset,
+                  0 0 0 1px #ffffff;
+      transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.4, 1), box-shadow 0.3s, border-radius 0.3s;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      transform: rotate(0deg);
+      animation: cardFloat 6s infinite alternate ease-in-out;
+    }
+
+    /* subtle float animation for liveliness */
+    .card:nth-child(1) { animation-delay: 0s; }
+    .card:nth-child(2) { animation-delay: 0.8s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+    .card:nth-child(4) { animation-delay: 1.2s; }
+    .card:nth-child(5) { animation-delay: 0.5s; }
+    .card:nth-child(6) { animation-delay: 1.5s; }
+
+    @keyframes cardFloat {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-8px) rotate(0.3deg); }
+    }
+
+    .card:hover {
+      animation-play-state: paused;
+      transform: translateY(-14px) scale(1.01) rotate(0.5deg);
+      box-shadow: 0 40px 60px -18px #3a1f6e70, 0 0 0 3px #ffd966, 0 0 25px #ffe08c;
+      border-radius: 2rem 2rem 2rem 2rem;
+      background: #ffffffee;
+    }
+
+    /* colored top ribbons */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: linear-gradient(90deg, #ffb347, #ff6f91, #a16eff, #4ecdc4);
+      background-size: 300% 100%;
+      animation: ribbonShift 6s infinite;
+    }
+
+    @keyframes ribbonShift {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
+    }
+
+    /* different ribbon colors per card for playfulness */
+    .card:nth-child(1)::before { background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4); }
+    .card:nth-child(2)::before { background: linear-gradient(90deg, #a1c4fd, #c2e9fb, #a1c4fd); }
+    .card:nth-child(3)::before { background: linear-gradient(90deg, #fbc2eb, #a6c1ee, #fbc2eb); }
+    .card:nth-child(4)::before { background: linear-gradient(90deg, #84fab0, #8fd3f4, #84fab0); }
+    .card:nth-child(5)::before { background: linear-gradient(90deg, #fccb90, #d57eeb, #fccb90); }
+    .card:nth-child(6)::before { background: linear-gradient(90deg, #e0c3fc, #8ec5fc, #e0c3fc); }
+
+    .card h2 {
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #1a1f36;
+      border-bottom: 3px dotted #ffb6c1;
+      padding-bottom: 0.85rem;
+    }
+
+    .card h2 .icon {
+      font-size: 2rem;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+
+    .concept-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      flex: 1;
+    }
+
+    .concept-list li {
+      display: flex;
+      gap: 0.85rem;
+      font-size: 1rem;
+      align-items: flex-start;
+      transition: transform 0.2s;
+    }
+
+    .concept-list li:hover {
+      transform: translateX(5px);
+    }
+
+    /* colorful pill labels */
+    .concept-list li strong {
+      font-weight: 700;
+      color: #ffffff;
+      background: #1e2b4a;
+      padding: 0.2rem 0.9rem;
+      border-radius: 40px;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      border: 1px solid #ffffff90;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s;
+      margin-top: 2px;
+    }
+
+    /* varying label colors per card for liveliness */
+    .card:nth-child(1) .concept-list li strong { background: #e85d75; }
+    .card:nth-child(2) .concept-list li strong { background: #4f8bc9; }
+    .card:nth-child(3) .concept-list li strong { background: #b465c9; }
+    .card:nth-child(4) .concept-list li strong { background: #2e9b7a; }
+    .card:nth-child(5) .concept-list li strong { background: #e08e3c; }
+    .card:nth-child(6) .concept-list li strong { background: #6c5fc7; }
+
+    .bullet {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #ffb347;
+      border-radius: 3px;
+      margin-top: 0.6rem;
+      flex-shrink: 0;
+      transform: rotate(45deg);
+      box-shadow: 0 0 8px #ffc107;
+    }
+
+    /* different bullet colors per card */
+    .card:nth-child(1) .bullet { background: #ff6b6b; box-shadow: 0 0 8px #ff6b6b; }
+    .card:nth-child(2) .bullet { background: #4d9de0; box-shadow: 0 0 8px #4d9de0; }
+    .card:nth-child(3) .bullet { background: #b983ff; box-shadow: 0 0 8px #b983ff; }
+    .card:nth-child(4) .bullet { background: #2ec4b6; box-shadow: 0 0 8px #2ec4b6; }
+    .card:nth-child(5) .bullet { background: #ff9f1c; box-shadow: 0 0 8px #ff9f1c; }
+    .card:nth-child(6) .bullet { background: #9d4edd; box-shadow: 0 0 8px #9d4edd; }
+
+    .concept-text {
+      color: #1f2a3f;
+      font-weight: 500;
+      flex: 1;
+      font-size: 0.96rem;
+    }
+
+    /* bright note badges */
+    .note-badge {
+      background: linear-gradient(135deg, #fff7e6, #ffe6f0);
+      border-radius: 60px;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #2d1b3c;
+      margin-top: 1.4rem;
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 2px solid white;
+      box-shadow: 0 6px 12px rgba(200, 120, 100, 0.2);
+      letter-spacing: -0.01em;
+      transition: all 0.2s;
+    }
+
+    .note-badge:hover {
+      background: #fff0d0;
+      transform: scale(1.02);
+    }
+
+    /* footer lively */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2.5rem;
+      font-size: 0.95rem;
+      color: #1b2c44;
+      border-top: 3px dashed rgba(255, 255, 255, 0.8);
+      padding-top: 1.8rem;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+    }
+
+    .tagline {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      background: #ffffffc9;
+      padding: 0.6rem 1.4rem;
+      border-radius: 60px;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 6px 16px rgba(255, 200, 150, 0.4);
+    }
+
+    .tagline i {
+      font-style: normal;
+      background: linear-gradient(135deg, #ff6f91, #a16eff);
+      color: white;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      letter-spacing: 0.4px;
+      font-weight: 600;
+      box-shadow: 0 0 0 2px #ffd966;
+    }
+
+    .interactive-hint {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #fffaecf0;
+      padding: 0.5rem 1.4rem;
+      border-radius: 60px;
+      border: 2px solid #ffd966;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #3a2b1b;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 6px 14px #ffb34760;
+      animation: pulseGlow 2.4s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 5px #ffb347, 0 0 10px #ffd96650; }
+      100% { box-shadow: 0 0 18px #ffb347, 0 0 28px #ffd96690; }
+    }
+
+    .interactive-hint span {
+      font-size: 1.4rem;
+      animation: wiggle 1.6s infinite;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(12deg); }
+      75% { transform: rotate(-8deg); }
+    }
+
+    /* emoji sparkles */
+    .sparkle {
+      position: absolute;
+      font-size: 1.4rem;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    /* small screens */
+    @media (max-width: 750px) {
+      .app-container {
+        padding: 1.8rem 1.3rem;
+        border-radius: 2.5rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .subhead {
+        font-size: 1rem;
+        padding: 0.4rem 1rem;
+        margin-bottom: 1.8rem;
+      }
+
+      .card {
+        padding: 1.5rem 1.3rem;
+        border-radius: 2rem 0.8rem 2rem 0.8rem;
+      }
+
+      .card h2 {
+        font-size: 1.4rem;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .concept-list li {
+        flex-wrap: wrap;
+      }
+
+      .concept-list li strong {
+        white-space: normal;
+      }
+
+      .tagline {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- playful floating sparkles -->
+    <div class="sparkle" style="top: 12px; right: 30px;">✨</div>
+    <div class="sparkle" style="bottom: 40px; left: 20px;">📌</div>
+    <div class="sparkle" style="top: 60%; right: 15px; font-size: 2rem;">⭐</div>
+
+    <h1>
+      🧪 Statistician's core
+      <span>lively edition</span>
+    </h1>
+    <div class="subhead">
+      🚀 The absolute essentials — foundations, inference, regression & pitfalls. Hover for magic.
+    </div>
+
+    <!-- grid of core areas with vibrant cards -->
+    <div class="grid">
+      <!-- CARD 1: Foundations & descriptive stats -->
+      <div class="card">
+        <h2>
+          <span class="icon">📊</span> Foundations
+        </h2>
+        <ul class="concept-list">
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Pop vs sample</strong> — parameters vs statistics; sampling distribution is the bridge.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Central tendency</strong> — mean (sensitive), median (robust), mode (categorical).</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Dispersion</strong> — variance, SD, IQR, range. Always report with a measure of spread.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Shape & outliers</strong> — skewness, kurtosis, boxplots, z‑scores. Check before assuming normality.</span>
+          </li>
+        </ul>
+        <div class="note-badge">
+          <span>📌</span> Law of total variance, covariance, correlation ≠ causation.
+        </div>
+      </div>
+
+      <!-- CARD 2: Probability & distributions -->
+      <div class="card">
+        <h2>
+          <span class="icon">🎲</span> Probability & distributions
+        </h2>
+        <ul class="concept-list">
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Bayes' theorem</strong> — prior · likelihood → posterior. Foundation of Bayesian inference.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Common distributions</strong> — Normal, Binomial, Poisson, Exponential, Beta, Gamma.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>LLN & CLT</strong> — sample mean → population mean; sample mean → normal (n large).</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Expectation & variance</strong> — linearity of expectation, var(X+Y).</span>
+          </li>
+        </ul>
+        <div class="note-badge">
+          <span>⚡</span> Moment generating functions, transformations of variables.
+        </div>
+      </div>
+
+      <!-- CARD 3: Statistical inference -->
+      <div class="card">
+        <h2>
+          <span class="icon">📐</span> Inference
+        </h2>
+        <ul class="concept-list">
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Hypothesis tests</strong> — p‑value, significance level (α), power (1−β), Type I/II errors.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Confidence intervals</strong> — interpretation: 95% CI captures true parameter in 95% of repeated samples.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>t‑tests & ANOVA</strong> — one‑sample, two‑sample, paired; F‑test for variance & group means.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Non‑parametric</strong> — Wilcoxon, Mann‑Whitney, Kruskal‑Wallis when assumptions fail.</span>
+          </li>
+        </ul>
+        <div class="note-badge">
+          <span>🔁</span> Bootstrap, permutation tests, likelihood ratio.
+        </div>
+      </div>
+
+      <!-- CARD 4: Regression & modeling -->
+      <div class="card">
+        <h2>
+          <span class="icon">📈</span> Regression & modeling
+        </h2>
+        <ul class="concept-list">
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Linear regression</strong> — OLS, assumptions: linearity, independence, homoscedasticity, normality of residuals.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>R² & adjusted R²</strong> — goodness‑of‑fit, but can inflate with more predictors.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Logistic regression</strong> — log‑odds, odds ratios, interpretation of coefficients.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Regularization</strong> — Ridge (L2), Lasso (L1), ElasticNet for high‑dimensional data.</span>
+          </li>
+        </ul>
+        <div class="note-badge">
+          <span>🧪</span> Interaction terms, multicollinearity (VIF), cross‑validation.
+        </div>
+      </div>
+
+      <!-- CARD 5: Study design & pitfalls -->
+      <div class="card">
+        <h2>
+          <span class="icon">⚠️</span> Design & pitfalls
+        </h2>
+        <ul class="concept-list">
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Bias & confounding</strong> — selection bias, recall bias, Simpson's paradox.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Randomization & blocking</strong> — reduce confounding, balance groups.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Sample size & power</strong> — determine before study; underpowered studies are common.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Multiple comparisons</strong> — Bonferroni, Benjamini‑Hochberg (FDR).</span>
+          </li>
+        </ul>
+        <div class="note-badge">
+          <span>🚩</span> p‑hacking, overfitting, data leakage, cherry‑picking.
+        </div>
+      </div>
+
+      <!-- CARD 6: Bayesian & modern stats -->
+      <div class="card">
+        <h2>
+          <span class="icon">🧠</span> Bayesian & modern
+        </h2>
+        <ul class="concept-list">
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Bayesian inference</strong> — posterior ∝ prior × likelihood; credible intervals.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>MCMC & variational inference</strong> — computational tools for posterior approximation.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Hierarchical models</strong> — partial pooling, shrinkage; great for grouped data.</span>
+          </li>
+          <li>
+            <span class="bullet"></span>
+            <span class="concept-text"><strong>Resampling</strong> — cross‑validation, bootstrap, jackknife.</span>
+          </li>
+        </ul>
+        <div class="note-badge">
+          <span>🌐</span> Causal inference, A/B testing, missing data (MCAR/MAR/MNAR).
+        </div>
+      </div>
+    </div>
+
+    <!-- footer with lively energy -->
+    <div class="footer">
+      <div class="tagline">
+        <i>must‑know</i> <span>GLM · survival analysis · time series · experimental design</span>
+      </div>
+      <div class="interactive-hint">
+        <span>✨</span> Hover, play, explore — your colorful stats cheat sheet.
+      </div>
+    </div>
+  </div>
+</body>
+</html>
